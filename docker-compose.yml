@@ -1,0 +1,34 @@
+services:
+  cameras_ros:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - USER_UID=1002
+        - USER_GID=1003
+        - USERNAME=user
+    container_name: cameras_ros
+    network_mode: host
+    pid: host
+    ipc: host
+    privileged: true
+    tty: true
+    stdin_open: true
+    volumes:
+      - .:/ros2_ws
+      - /tmp/.X11-unix:/tmp/.X11-unix
+      - /dev:/dev
+      - ${HOME}/.ssh:/home/user/.ssh:ro
+      - ${HOME}/.gitconfig:/home/user/.gitconfig:ro 
+    environment:
+      QT_X11_NO_MITSHM: 1
+      DISPLAY: $DISPLAY
+      BUILD_WS: false
+      ROS_DISTRO: humble
+      FASTRTPS_DEFAULT_PROFILES_FILE: /ros2_ws/fastdds_no_shm.xml
+    cap_add:
+      - SYS_NICE
+    ulimits:
+      rtprio: 99
+      rttime: -1
+      memlock: 8428281856

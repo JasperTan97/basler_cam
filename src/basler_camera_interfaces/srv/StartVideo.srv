@@ -1,0 +1,6 @@
+uint32 fps
+bool record
+bool stream
+---
+bool success
+string message
