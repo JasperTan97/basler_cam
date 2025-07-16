@@ -1,0 +1,37 @@
+{
+    "name": "ROS 2 Development Container",
+    "privileged": true,
+    "remoteUser": "user",
+    "dockerComposeFile": "../docker-compose.yml",
+    "service": "cameras_ros",
+    "workspaceFolder": "/ros2_ws",
+    "initializeCommand": "echo \"USER_UID=$(id -u $USER)\nUSER_GID=$(id -g $USER)\" > .env",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-vscode.cpptools",
+                "xaver.clang-format",
+                "ms-vscode.cmake-tools",
+                "ms-iot.vscode-ros",
+                "ms-azuretools.vscode-docker",
+                "ms-vscode-remote.remote-containers",
+                "ms-vscode.cpptools-extension-pack",
+                "ms-python.black-formatter"
+            ],
+            "settings": {
+                "python.analysis.extraPaths": [
+                    "/opt/ros/humble/lib/python3.10/site-packages",
+                    "/opt/ros/humble/local/lib/python3.10/dist-packages",
+                    "/opt/ros/humble/local/lib/python3.10/dist-packages/sensor_msgs",
+                    "/opt/pylon",
+                    "/opt/pylon/lib/cmake/pylon"
+                ],
+                "python.analysis.useLibraryCodeForTypes": true,
+                "terminal.integrated.defaultProfile.linux": "bash",
+                "terminal.integrated.profiles.linux": { "bash": { "path": "/bin/bash" } }
+            }
+        }
+    }
+}

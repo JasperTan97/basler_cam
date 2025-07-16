@@ -32,6 +32,8 @@ RUN apt-get update && \
 #     && sudo apt-get clean \
 #     && sudo rm -rf /var/lib/apt/lists/*
 
+RUN rosdep update 
+
 COPY requirements.txt /ros2_ws/requirements.txt
 
 RUN pip3 install --no-cache-dir -r /ros2_ws/requirements.txt
@@ -45,11 +47,30 @@ RUN groupadd --gid $USER_GID $USERNAME \
 && echo "source /usr/share/colcon_argcomplete/hook/colcon-argcomplete.bash" >> /home/$USERNAME/.bashrc \
 && echo "ROS_DOMAIN_ID=27" >> /home/$USERNAME/.bashrc
 
+COPY ./pylon_setup/pylon-25.06.4_linux-x86_64_debs.tar.gz /tmp/
+RUN tar -xzf /tmp/pylon-25.06.4_linux-x86_64_debs.tar.gz -C /tmp \
+    && rm /tmp/pylon-25.06.4_linux-x86_64_debs.tar.gz
+RUN chmod 1777 /tmp
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libgl1-mesa-glx \
+        libxcb-xinerama0 \
+        libxcb-xinput0 \
+        libxcb-cursor0 \
+        libgl1 \
+        libglvnd0 \
+        libglx-mesa0 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update \
+    && dpkg -i /tmp/pylon_*.deb \
+    && apt-get install -f -y \
+    && rm -rf /var/lib/apt/lists/* /tmp/pylon_*.deb
+
 USER $USERNAME
-RUN rosdep update 
+WORKDIR /ros2_ws
 
 # Set the default shell to bash and the workdir to the source directory
 SHELL [ "/bin/bash", "-c" ]
 CMD [ "/bin/bash" ]
-WORKDIR /ros2_ws
 RUN source ~/.bashrc

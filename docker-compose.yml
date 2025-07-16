@@ -25,7 +25,13 @@ services:
       DISPLAY: $DISPLAY
       BUILD_WS: false
       ROS_DISTRO: humble
+      ROS_DOMAIN_ID: 27
+      RMW_IMPLEMENTATION: rmw_fastrtps_cpp
       FASTRTPS_DEFAULT_PROFILES_FILE: /ros2_ws/fastdds_no_shm.xml
+      PYLON_ROOT: /opt/pylon
+      PATH: "$PYLON_ROOT/bin:$PATH"
+      LD_LIBRARY_PATH: "$PYLON_ROOT/lib:$LD_LIBRARY_PATH"
+      GENICAM_GENTL64_PATH: "$PYLON_ROOT/share/pylon"
     cap_add:
       - SYS_NICE
     ulimits:
